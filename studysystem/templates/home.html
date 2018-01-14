@@ -1,0 +1,28 @@
+{%extends 'base.html'%}
+
+{%block content%}
+    <div class="jumbotron">
+          <h1 class="display-3 centered">LaTeX creator</h1>
+          {%if courses%}
+            <p class="lead">Here is the List of your courses: </p>
+           <p class="lead">You can create courses <a href="{% url 'course:add_course' %}">here</a></p>
+            {%for course in courses%}
+                <p class="lead">{{forloop.counter}}. {{course}} course | <a href="{%url 'course:edit_course' course.id%}"> Edit </a> <a href="{%url 'course:delete_course' course.id%}"> Delete</a> | <a href="{%url 'exam:add_exam' course.id%}">Add Exam</a></p>
+                {%if course.exam_set.all%}
+                  <p class="lead small">{{course}}'s exams list:</p>
+                    {% for exam in course.exam_set.all%}
+                        <ul>
+                            <li>
+                              <p><a href="{%url 'exam:get_exam' exam.id %}">{{exam}}</a> | <a href="{%url 'exam:edit_exam' exam.id%}">Edit </a> <a href="{%url 'exam:delete_exam' exam.id%}"> Delete</a></p>
+                            </li>
+                        </ul>
+                    {%endfor%}
+                    {%else%}
+                      <p class="lead small">No exams for {{course}}</p>
+                  {%endif%}
+            {%endfor%}
+          {%else%}
+           <p class="lead">There are no courses. You can create it <a href="{% url 'course:add_course' %}">now</a></p>
+          {%endif%}
+    </div>
+{%endblock%}

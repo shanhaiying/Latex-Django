@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'css/site.css' %}" rel="stylesheet" media="screen">
+    <meta charset="UTF-8">
+    <title>{%block title%}{% endblock %}</title>
+</head>
+<body>
+    <div class="container">
+      <header class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills float-right">
+            <li class="nav-item">
+              <a class="nav-link active" href="{% url 'study:home_page'%}">Home <span class="sr-only">(current)</span></a>
+            </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'study:get_students'%}">Students</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#">About</a>
+              </li>
+            </ul>
+          </nav>
+          <h3 class="text-muted">LaTeX project</h3>
+        </header>
+
+    {% block content %}
+    {% endblock %}
+    <footer class="footer">
+        <p>© Bekzat Shayakhmetov 2018</p>
+    </footer>
+
+    </div> <!-- /container -->
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

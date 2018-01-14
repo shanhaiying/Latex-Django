@@ -1,0 +1,18 @@
+{%extends 'base.html'%}
+
+{%block content%}
+    <div class="jumbotron">
+        {%if students%}
+                <h1 class="display-3 centered">List of students</h1>
+                <p class="lead">You can add students <a href="{%url 'study:add_student'%}">here</a></p>
+            {%for student in students%}
+                <br>
+                <ul>
+                    <li><a href="{%url 'study:get_student' student.id%}">{{student.name}} {{student.surname}}</a></li>
+                </ul>
+            {%endfor%}
+        {%else%}
+        <p class="lead">No students! You can add students <a href="{%url 'study:add_student'%}">here</a></p>
+        {%endif%}
+    </div>
+{%endblock%}

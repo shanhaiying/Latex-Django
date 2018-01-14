@@ -1,0 +1,37 @@
+{%extends 'base.html'%}
+
+{%block content%}
+    <div class="jumbotron">
+        {%if student%}
+                <h1 class="display-3 centered">Info of a student</h1>
+                <br>
+                <ul>
+            {%for s in student%}
+                        <p>ID number: {{s.id_of_student}} <br></p>
+                        <p>First Name: {{s.name}} <br></p>
+                        <p>Last Name: {{s.surname}} <br></p>
+                    </ul>
+
+            <p class="lead">Courses of the student</p>
+                {%for c in s.course.all%}
+                    <ul>
+                        <li>{{c.name_of_course}}</li>
+                    </ul>
+                {%endfor%}
+            <p class="lead">You can add courses </p>
+            {%endfor%}
+            <form action="" method="POST">
+                 {%csrf_token%}
+                <select name="dropdown_courses" id="">
+                    {%for course in courses%}
+                        <option value="{{course.id}}" name="course">{{course.name_of_course}}</option>
+                    {%endfor%}
+                </select>
+                    <button class="btn btn-primary" type="submit">Send</button>
+            </form>
+
+        {%else%}
+        <p class="lead">No students! You can add students <a href="{%url 'study:add_student'%}">here</a></p>
+        {%endif%}
+    </div>
+{%endblock%}

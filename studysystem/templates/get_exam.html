@@ -1,0 +1,27 @@
+{%extends 'base.html'%}
+
+{%block content%}
+    <div class="jumbotron">
+            {%for exam in examination%}
+                <h1 class="display-3 centered">{{exam}}</h1>
+                <br>
+                <p class="lead centered">You can <a href="{%url 'study:generate_page' exam.id%}">generate</a> LaTeX file from this exam page</p>
+
+                <p class="lead">You can add questions <a href="{%url 'question:add_question' exam.id%}">here</a></p>
+
+
+                {%for question in exam.question_set.all%}
+                    <p class="lead">{{forloop.counter}}. {{question}} | <a href="{%url 'question:edit_question' exam.id question.id%}"> Edit</a><a href="{%url 'question:delete_question' exam.id question.id%}"> Delete  </a> | <a href="{%url 'answer:add_answer' exam.id question.id%}">  Add answer</a></p>
+
+                    {%for answers in question.answer_set.all%}
+                        <ul>
+                            <li>
+                                <p>{{answers.answer}} | <a href="{%url 'answer:edit_answer' exam.id answers.id%}"> Edit</a> | <a href="{%url 'answer:delete_answer' exam.id answers.id %}">Delete</a> </p>
+                            </li>
+                        </ul>
+                    {%endfor%}
+                {%endfor%}
+
+            {%endfor%}
+    </div>
+{%endblock%}
