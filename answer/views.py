@@ -11,7 +11,7 @@ def edit_answer(request, exam_id, answer_id):
         answer.save()
         return redirect('exam:get_exam', exam_id)
     context = {"value": answer.answer,
-               "title": "Edit answer '{}'".format(answer)}
+               "title": "Edit answer '{}'".format(answer.answer)}
     return render(request, 'edit.html', context)
 
 

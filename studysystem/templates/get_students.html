@@ -8,7 +8,7 @@
             {%for student in students%}
                 <br>
                 <ul>
-                    <li><a href="{%url 'study:get_student' student.id%}">{{student.name}} {{student.surname}}</a></li>
+                    <li><a href="{%url 'study:get_student' student.id%}">{{student.name}} {{student.surname}}</a> | <a href="{%url 'study:delete_student' student.id%}">Delete</a></li>
                 </ul>
             {%endfor%}
         {%else%}

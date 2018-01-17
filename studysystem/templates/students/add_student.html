@@ -5,7 +5,6 @@
           <h1 class="display-3 centered">Add a student</h1>
           <form method="POST">
             {%csrf_token%}
-            <div class="input-group mb-3">
                   <label for="number">Number: </label>
                   <input type="text" class="form-control" name="number" id="number"> <br>
 
@@ -16,9 +15,8 @@
                    <input type="text" class="form-control" aria-describedby="basic-addon2" name="surname" id="surname">
 
                   <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit">Send</button>
+                    <br><button class="btn btn-primary" type="submit">Send</button>
                   </div>
-            </div>
           </form>
     </div>
 {%endblock%}

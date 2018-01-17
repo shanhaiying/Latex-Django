@@ -5,6 +5,7 @@ import pyqrcode
 
 from django.views.static import serve
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 # from django.views.generic import CreateView
 from exam.models import Exam
 from course.models import Course
@@ -32,11 +33,23 @@ def get_student(request, student_id):
     courses = Course.objects.all()
     context = {"student": student, "courses": courses}
     if request.POST:
-        id = request.POST.get('dropdown_courses', "error")
-        if not id == "error":
+        number = request.POST.get('number', "error")
+        name = request.POST.get('name', "error")
+        surname = request.POST.get('surname', "error")
+        if not number == "error":
             student = Student.objects.get(pk=student_id)
-            course = Course.objects.get(pk=id)
-            student.course.add(course)
+            student.number = number
+            student.name = name
+            student.surname = surname
+            student.save()
+            return redirect("study:get_students")
+
+        else:
+            id = request.POST.get('dropdown_courses', "error")
+            if not id == "error":
+                student = Student.objects.get(pk=student_id)
+                course = Course.objects.get(pk=id)
+                student.course.add(course)
         return redirect("study:get_student", student_id)
     return render(request, "students/get_student.html", context)
 
@@ -56,12 +69,16 @@ def add_student(request):
     return render(request, "students/add_student.html")
 
 
-def delete_student(request):
-    pass
+def delete_student(request, student_id):
+    Student.objects.filter(pk=student_id).delete()
+    return redirect("study:get_students")
 
 
-def edit_student(request):
-    pass
+def delete_course(request, student_id, course_id):
+    student = Student.objects.get(pk=student_id)
+    course = Course.objects.get(pk=course_id)
+    student.course.remove(course)
+    return redirect("study:get_student", student_id)
 
 
 def generate_page(request, exam_id):
@@ -85,7 +102,8 @@ def generate_page(request, exam_id):
             exam = Exam.objects.get(pk=exam_id)
             questions = exam.question_set.all()
 
-            # Create some temporary file and create there questions with answers
+            # Create some temporary file and create there questions with
+            # answers
             with open('temp.txt', 'w') as f:
                 for num, quest in enumerate(questions):
                     num += 1
@@ -95,17 +113,21 @@ def generate_page(request, exam_id):
                     f.write(r"\n")
                     if quest.answer_set.all():
                         # Writing circle answers
-                        new_anwers = re.sub("_Number_", str(num), answer_tempalte)
+                        new_anwers = re.sub(
+                            "_Number_", str(num), answer_tempalte)
+
                         file = re.sub(r"%paste_here_answers", new_anwers, file)
+
                         f.write(r"\\begin{oneparchoices}")
                         for answer in quest.answer_set.all():
                             f.write("\n\choice {} \n".format(answer.answer))
-                        f.write("\\end{oneparchoices} %question" + str(num))
-                        f.write(r"%paste_here_question")
+                        f.write(r"\\end{oneparchoices} %question" + str(num))
+                        f.write(r"\n%paste_here_question")
                     else:
                         f.write(r"\n\\begin{solutionorlines}[0.5in]\n" +
                                 r"\\end{solutionorlines}")
-                        new_anwers = re.sub("_Number_", str(num), open_answer_template)
+                        new_anwers = re.sub("_Number_", str(
+                            num), open_answer_template)
                         file = re.sub(r"%paste_here_answers", new_anwers, file)
 
             # Reading that temp file

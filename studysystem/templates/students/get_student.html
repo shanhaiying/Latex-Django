@@ -7,15 +7,19 @@
                 <br>
                 <ul>
             {%for s in student%}
-                        <p>ID number: {{s.id_of_student}} <br></p>
-                        <p>First Name: {{s.name}} <br></p>
-                        <p>Last Name: {{s.surname}} <br></p>
-                    </ul>
+                <form action="" method="POST">
+                    {%csrf_token%}
+                    <p>ID number:<input type="text" class="form-control" name="number" value="{{s.id_of_student}}"></p>
+                    <p>First Name:  <input type="text" class="form-control" name="name" value="{{s.name}}"></p>
+                    <p>Last Name: <input type="text" class="form-control" name="surname" value="{{s.surname}}"></p>
+                    <button class="btn btn-primary" type="submit">Edit</button>
+                </form>
+                <br>
 
             <p class="lead">Courses of the student</p>
                 {%for c in s.course.all%}
                     <ul>
-                        <li>{{c.name_of_course}}</li>
+                        <li>{{c.name_of_course}} | <a href="{%url 'study:delete_course' s.id c.id%}"> Delete</a></li>
                     </ul>
                 {%endfor%}
             <p class="lead">You can add courses </p>
@@ -27,7 +31,7 @@
                         <option value="{{course.id}}" name="course">{{course.name_of_course}}</option>
                     {%endfor%}
                 </select>
-                    <button class="btn btn-primary" type="submit">Send</button>
+                    <button class="btn btn-primary" type="submit">Add course</button>
             </form>
 
         {%else%}
